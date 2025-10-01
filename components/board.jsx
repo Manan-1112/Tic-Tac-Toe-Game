@@ -4,7 +4,7 @@ const Board = () => {
     const [state, setState] = useState(Array(9).fill(null))
     const [isXturn, setIsXturn] = useState(true)
     const handleClick = (index) => {
-        if(state[index] !== null){
+        if (state[index] !== null) {
             return;
         }
         const copyState = [...state]
@@ -13,14 +13,14 @@ const Board = () => {
         setState(copyState)
     }
     const checkDraw = () => {
-        let count = 0 
+        let count = 0
         state.forEach((element) => {
             if (element !== null) {
                 count++
             }
         })
         return count === 9 ? true : false
-    }   
+    }
     const checkWinner = () => {
         const winningLogic = [
             [0, 1, 2],
@@ -40,38 +40,16 @@ const Board = () => {
         }
         return false
     }
+    function Resetgame () {
+        setState(Array(9).fill(null))
+    }
     const isWinner = checkWinner()
     const isDraw = checkDraw()
-    if (isDraw) {
-        return drawGame()
-    }
-    function drawGame() {
 
-        return (
-            <div className="board">
-                <h1>Match is Draw</h1>
-                <button onClick={() => {
-                    setState(Array(9).fill(null))
-                }}>Play Again</button> 
-            </div>
-        )
-    }
-    function ResetGame() {
-            return (
-                <div className="board">
-                    <h1>{isWinner} is Winner </h1>
-                    <button onClick={() => {
-                        setState(Array(9).fill(null))
-                    }}>Play Again</button>
-                </div>
-            )
-        }
-    if (isWinner) {
-        return ResetGame()
-    }
-
-    return (
-        <div className="board">
+        return( <div className="board">
+            {isWinner && <h2>{isWinner} is the Winner!</h2>}
+            {!isWinner && isDraw && <h2>Match is Draw!</h2>}
+            {!isWinner && !isDraw && <h2> Current Player is {isXturn ? "X" : "O"}</h2>}
             <div className="row">
                 <Square onClick={() => {
                     handleClick(0)
@@ -105,7 +83,7 @@ const Board = () => {
                     handleClick(8)
                 }} value={state[8]} />
             </div>
-            
+            {isWinner || isDraw ? <button onClick={Resetgame} style={{padding:"10px",borderRadius:"7px",margin:"10px"}}>Play Again</button> : null}
         </div>
     )
 }
